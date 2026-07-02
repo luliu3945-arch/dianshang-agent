@@ -9,7 +9,9 @@ class Settings(BaseSettings):
     # LLM
     llm_api_key: str = ""
     llm_base_url: str = "https://dashscope.aliyuncs.com/compatible-mode/v1"
-    llm_model: str = "glm-5"
+    # 三类LLM任务(画像分析/排序/文案)均为结构化输出，轻量模型即可胜任；
+    # 推理类模型(glm-5等)的思考token会使单次调用达30-40s，与推荐场景的延迟要求不匹配
+    llm_model: str = "qwen-flash"
     llm_temperature: float = 0.7
     llm_max_tokens: int = 2048
 
@@ -30,11 +32,11 @@ class Settings(BaseSettings):
     ab_test_default_bucket_count: int = 100
 
     # Agent timeouts (seconds)
-    # 推理类模型(如glm-5)单次调用可达30-40s，LLM类Agent需留足余量；
-    # 换非推理模型(如qwen-flash)后可下调到5-10s
-    agent_timeout_user_profile: float = 60.0
-    agent_timeout_product_rec: float = 60.0
-    agent_timeout_marketing_copy: float = 60.0
+    # 按qwen-flash实测延迟(1-3s)设定，留5倍余量；
+    # 若改用推理类模型(如glm-5，单次30-40s)需相应上调
+    agent_timeout_user_profile: float = 15.0
+    agent_timeout_product_rec: float = 15.0
+    agent_timeout_marketing_copy: float = 15.0
     agent_timeout_inventory: float = 5.0
 
     model_config = {"env_file": ".env", "env_prefix": "ECOM_"}

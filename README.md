@@ -64,6 +64,8 @@
 
 **实时特征**（`services/feature_store.py`）：Redis Sorted Set 以时间戳为 score 存储行为序列，O(log N) 支持 1h/24h/7d 滑动窗口统计与 RFM 打分。
 
+**模型选型**：三类 LLM 任务（画像分析 / 排序 / 文案）均为结构化输出，选用轻量非推理模型（qwen-flash）。实测对比：推理类模型（glm-5）因思考 token 开销端到端约 80s，切换后降至约 6s，且 Agent 超时阈值可随之从 60s 收紧到 15s，长尾故障恢复更快。
+
 ## 快速开始
 
 需要一个 OpenAI 兼容的 LLM API Key（阿里云百炼 / 智谱 / DeepSeek / 本地 Ollama 均可）。
