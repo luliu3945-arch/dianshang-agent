@@ -30,9 +30,11 @@ class Settings(BaseSettings):
     ab_test_default_bucket_count: int = 100
 
     # Agent timeouts (seconds)
-    agent_timeout_user_profile: float = 5.0
-    agent_timeout_product_rec: float = 8.0
-    agent_timeout_marketing_copy: float = 10.0
+    # 推理类模型(如glm-5)单次调用可达30-40s，LLM类Agent需留足余量；
+    # 换非推理模型(如qwen-flash)后可下调到5-10s
+    agent_timeout_user_profile: float = 60.0
+    agent_timeout_product_rec: float = 60.0
+    agent_timeout_marketing_copy: float = 60.0
     agent_timeout_inventory: float = 5.0
 
     model_config = {"env_file": ".env", "env_prefix": "ECOM_"}

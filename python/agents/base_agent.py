@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import asyncio
 import time
 from abc import ABC, abstractmethod
 from typing import Any
@@ -53,7 +54,8 @@ class BaseAgent(ABC):
             reraise=True,
         )
         async def _inner():
-            return await self._execute(**kwargs)
+            # 独立超时控制：单个Agent卡死不能拖垮整条推荐链路
+            return await asyncio.wait_for(self._execute(**kwargs), timeout=self.timeout)
 
         return await _inner()
 
